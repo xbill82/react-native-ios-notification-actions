@@ -32,17 +32,17 @@ export class Category {
 
 }
 
-export const updateCategories = (categories) => {
+export const updateCategories = (categories, shouldRequestPermission = true) => {
   let cats = categories.map((cat) => {
     return Object.assign({}, cat.opts, {
       actions: cat.opts.actions.map((action) => action.opts)
     });
   });
 
-  RNNotificationActions.updateCategories(cats);
+  RNNotificationActions.updateCategories(cats, shouldRequestPermission);
   // Re-update when permissions change
   NativeAppEventEmitter.addListener('remoteNotificationsRegistered', () => {
-    RNNotificationActions.updateCategories(cats);
+    RNNotificationActions.updateCategories(cats, false);
   });
 };
 

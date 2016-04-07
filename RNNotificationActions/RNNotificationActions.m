@@ -8,6 +8,7 @@
 #import "RCTUtils.h"
 
 NSString *const RNNotificationActionReceived = @"NotificationActionReceived";
+NSString *const RNNotificationPermissionReceived = @"NotificationPermissionReceived";
 
 @implementation RCTConvert (UIUserNotificationActivationMode)
 RCT_ENUM_CONVERTER(UIUserNotificationActivationMode, (
@@ -61,6 +62,10 @@ RCT_EXPORT_MODULE();
                                              selector:@selector(handleNotificationActionReceived:)
                                                  name:RNNotificationActionReceived
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotificationPermissionReceived:)
+                                                 name:RNNotificationPermissionReceived
+                                               object:nil];
     NSDictionary *lastActionInfo = [RNNotificationActionsManager sharedInstance].lastActionInfo;
     if(lastActionInfo != nil) {
         [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationActionReceived
@@ -102,20 +107,31 @@ RCT_EXPORT_MODULE();
     return category;
 }
 
-RCT_EXPORT_METHOD(updateCategories:(NSArray *)json)
+- (void)registerNotificationSettings
+{
+  if (self.categories) {
+    // Get the current types
+    UIUserNotificationSettings *settings;
+    UIUserNotificationType types = settings.types;
+
+    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:types categories:self.categories]];
+  }
+}
+
+RCT_EXPORT_METHOD(updateCategories:(NSArray *)json shouldRequestPermission:(BOOL)shouldRequestPermission)
 {
     NSMutableArray *categories = [[NSMutableArray alloc] init];
     // Create the category
     for (NSDictionary *categoryJSON in json) {
         [categories addObject:[self categoryFromJSON:categoryJSON]];
     }
-    
-    // Get the current types
-    UIUserNotificationSettings *settings;
-    UIUserNotificationType types = settings.types;
-    
+  
+    self.categories = [NSSet setWithArray:categories];
+  
     // Update the settings for these types
-    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:types categories:[NSSet setWithArray:categories]]];
+    if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications] || shouldRequestPermission) {
+        [self registerNotificationSettings];
+    }
 }
 
 RCT_EXPORT_METHOD(callCompletionHandler)
@@ -127,6 +143,12 @@ RCT_EXPORT_METHOD(callCompletionHandler)
     }
 }
 
++ (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:RNNotificationPermissionReceived
+                                                        object:self
+                                                      userInfo:nil];
+}
 
 // Handle notifications received by the app delegate and passed to the following class methods
 + (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)())completionHandler;
@@ -167,6 +189,11 @@ RCT_EXPORT_METHOD(callCompletionHandler)
 {
     [_bridge.eventDispatcher sendAppEventWithName:@"notificationActionReceived"
                                              body:notification.userInfo];
+}
+
+- (void)handleNotificationPermissionReceived:(NSNotification __unused *)notification
+{
+    [self registerNotificationSettings];
 }
 
 @end
