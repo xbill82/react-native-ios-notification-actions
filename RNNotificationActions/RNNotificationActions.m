@@ -111,7 +111,7 @@ RCT_EXPORT_MODULE();
 {
   if (self.categories) {
     // Get the current types
-    UIUserNotificationSettings *settings;
+    UIUserNotificationSettings *settings = [[UIApplication sharedApplication] currentUserNotificationSettings];
     UIUserNotificationType types = settings.types;
 
     [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:types categories:self.categories]];
