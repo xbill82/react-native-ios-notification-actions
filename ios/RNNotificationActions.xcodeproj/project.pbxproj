@@ -45,7 +45,10 @@
 		E2B7F2261C36E6D800945232 = {
 			isa = PBXGroup;
 			children = (
-				E2B7F2311C36E6D800945232 /* RNNotificationActions */,
+				E2B7F23B1C36E76100945232 /* RNNotificationActions.h */,
+				E2B7F23C1C36E76100945232 /* RNNotificationActions.m */,
+				5D1251B21CB6130700A4BC7A /* RNNotificationActionsManager.h */,
+				5D1251B31CB6130700A4BC7A /* RNNotificationActionsManager.m */,
 				E2B7F2301C36E6D800945232 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,17 +59,6 @@
 				E2B7F22F1C36E6D800945232 /* libRNNotificationActions.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E2B7F2311C36E6D800945232 /* RNNotificationActions */ = {
-			isa = PBXGroup;
-			children = (
-				E2B7F23B1C36E76100945232 /* RNNotificationActions.h */,
-				E2B7F23C1C36E76100945232 /* RNNotificationActions.m */,
-				5D1251B21CB6130700A4BC7A /* RNNotificationActionsManager.h */,
-				5D1251B31CB6130700A4BC7A /* RNNotificationActionsManager.m */,
-			);
-			path = RNNotificationActions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
