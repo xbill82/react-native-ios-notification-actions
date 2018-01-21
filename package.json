@@ -1,6 +1,6 @@
 {
   "name": "@kingstinct/react-native-ios-notification-actions",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "Swipe + text input actions for ios push notifications",
   "main": "index.js",
   "directories": {
@@ -18,6 +18,11 @@
     "react-native",
     "ios"
   ],
+  "rnpm": {
+    "ios": {
+      "project": "RNNotificationActions/RNNotificationActions.xcodeproj"
+    },
+  },
   "author": "Alonso Holmes <hello@alonso.io>",
   "license": "MIT",
   "bugs": {
