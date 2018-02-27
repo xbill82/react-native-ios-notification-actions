@@ -9,10 +9,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/robertherber/react-native-ios-notification-actions.git"
-  },
   "keywords": [
     "react-component",
     "react-native",
@@ -22,9 +18,5 @@
     "react-native": ">=0.40.0"
   },
   "author": "Robert Herber <robert@herber.me>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/robertherber/react-native-ios-notification-actions/issues"
-  },
-  "homepage": "https://github.com/robertherber/react-native-ios-notification-actions#readme"
+  "license": "MIT"
 }
